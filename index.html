@@ -1144,23 +1144,24 @@
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
       border-top: 1px solid var(--border-color);
-      padding: 10px 16px;
+      padding: 10px 12px;
       display: flex;
-      gap: 8px;
+      gap: 6px;
       z-index: 999;
       box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
     }
     .mobile-cta a {
       flex: 1;
       text-align: center;
-      padding: 12px 0;
+      padding: 11px 2px;
       border-radius: 8px;
-      font-size: 14px;
+      font-size: 12.5px;
       font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 4px;
+      gap: 3px;
+      white-space: nowrap;
     }
     .mobile-cta .btn-call {
       background: var(--primary);
@@ -1170,9 +1171,30 @@
       background: var(--accent);
       color: #fff;
     }
+    .mobile-cta .btn-kakao {
+      background: #FEE500;
+      color: #191919;
+    }
     .mobile-cta .btn-naver {
       background: #03c75a;
       color: #fff;
+    }
+    .kakao-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: #FEE500;
+      color: #191919;
+      padding: 14px 18px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    .kakao-btn:hover {
+      opacity: 0.9;
     }
 
     /* Responsive */
@@ -2023,17 +2045,23 @@
             <div class="success-icon">✅</div>
             <h3>방문 실측 예약이 접수되었습니다!</h3>
             <p class="success-desc">
-              해담커튼블라인드 박지수 대표가 남겨주신 연락처로 <strong>빠른 시간 내에 전화/문자로 확정 연락</strong>을 드립니다.
+              접수 내용이 정상 저장되었습니다. <strong>아래 카카오톡 버튼을 누르시면 예약 내용이 자동 복사되어</strong> 대표님과 바로 1:1 대화가 연결됩니다.
             </p>
 
             <div class="summary-box" id="submittedSummary"></div>
 
             <div class="success-actions">
-              <a id="smsDirectBtn" href="#" class="btn-main">
-                💬 대표님 휴대폰으로 예약 문자 바로 전송하기
+              <a id="kakaoDirectBtn" href="https://pf.kakao.com/_YDdwX/chat" target="_blank" onclick="copyBookingSummary()" class="kakao-btn">
+                💬 카톡 채널로 예약 내용 바로 보내기
               </a>
+              <p id="copyNotice" style="font-size: 12px; color: var(--accent); font-weight: 600; margin: -2px 0 4px;">
+                📋 예약 내용이 클립보드에 복사되었습니다. 카톡 채팅창에 붙여넣기 해주세요!
+              </p>
               <a href="tel:010-2668-9548" class="btn-sub">
                 📞 전화로 즉시 통화하기 (010-2668-9548)
+              </a>
+              <a id="smsDirectBtn" href="#" class="btn-sub" style="background: #f6f4f0;">
+                📱 문자로 예약 내용 보내기
               </a>
               <button type="button" onclick="resetBookingForm()" style="background: none; border: none; color: var(--text-light); font-size: 13px; text-decoration: underline; cursor: pointer; margin-top: 10px;">
                 새로운 방문 실측 예약 작성하기
@@ -2150,6 +2178,9 @@
           <a href="#booking-form" class="btn-main" style="text-align: center;">
             📝 1분 무료 방문 실측 신청하기
           </a>
+          <a href="https://pf.kakao.com/_YDdwX/chat" target="_blank" class="kakao-btn">
+            💬 카카오톡 채널 1:1 상담
+          </a>
           <a href="tel:010-2668-9548" class="btn-sub" style="text-align: center;">
             📞 010-2668-9548 전화 상담
           </a>
@@ -2168,6 +2199,8 @@
   <footer>
     <div class="container footer-inner">
       <div class="footer-links">
+        <a href="https://pf.kakao.com/_YDdwX" target="_blank">카카오톡 채널</a>
+        <span>·</span>
         <a href="https://naver.me/FvQU30le" target="_blank">네이버 스마트플레이스</a>
         <span>·</span>
         <a href="https://www.google.com/maps?cid=10389945255996075635" target="_blank">구글 지도</a>
@@ -2187,10 +2220,13 @@
   <!-- Mobile Sticky Bottom Bar -->
   <div class="mobile-cta">
     <a href="tel:010-2668-9548" class="btn-call">
-      📞 전화 상담
+      📞 전화
     </a>
     <a href="#booking-form" class="btn-reserve">
-      📝 무료 실측 예약
+      📝 실측예약
+    </a>
+    <a href="https://pf.kakao.com/_YDdwX/chat" target="_blank" class="btn-kakao">
+      💬 카톡
     </a>
     <a href="https://naver.me/FvQU30le" target="_blank" class="btn-naver">
       🗺️ 네이버
@@ -2199,6 +2235,14 @@
 
   <!-- Form Handling Script -->
   <script>
+    let latestBookingText = '';
+
+    function copyBookingSummary() {
+      if (latestBookingText && navigator.clipboard) {
+        navigator.clipboard.writeText(latestBookingText).catch(() => {});
+      }
+    }
+
     function handleFormSubmit(event) {
       event.preventDefault();
 
@@ -2215,6 +2259,35 @@
       });
       const productsText = checkedProducts.length > 0 ? checkedProducts.join(', ') : '상담 후 결정';
 
+      // 1. 구글 폼(구글 드라이브 자동 저장)으로 즉시 백그라운드 전송
+      const googleFormData = new FormData();
+      googleFormData.append('entry.1302284359', name);
+      googleFormData.append('entry.777726839', phone);
+      googleFormData.append('entry.940665021', address);
+      googleFormData.append('entry.655056376', productsText);
+      googleFormData.append('entry.1132907945', `${date} / ${time}`);
+      googleFormData.append('entry.1113076617', memo);
+      fetch('https://docs.google.com/forms/d/e/1FAIpQLSdIPhhqSBuBsbXpJHjeSFj8UTjn1yi24ptfnzuNlYwHnStChw/formResponse', {
+        method: 'POST',
+        mode: 'no-cors',
+        body: googleFormData
+      }).catch(() => {});
+
+      // 2. 지메일(jisupark00717@gmail.com) 즉시 알림 전송
+      fetch('https://formsubmit.co/ajax/jisupark00717@gmail.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: `[해담커튼 무료실측신청] ${name} 님 (${address})`,
+          이름: name,
+          연락처: phone,
+          방문주소: address,
+          필요제품: productsText,
+          희망일시: `${date} / ${time}`,
+          요청사항: memo
+        })
+      }).catch(() => {});
+
       // Build Summary Display
       const summaryHtml = `
         <p><strong>신청자명:</strong> ${name} 님</p>
@@ -2226,9 +2299,10 @@
       `;
       document.getElementById('submittedSummary').innerHTML = summaryHtml;
 
-      // Build SMS URL for Representative Park Jisu
-      const smsBody = `[해담커튼 무료실측신청]\n이름: ${name}\n연락처: ${phone}\n주소: ${address}\n필요제품: ${productsText}\n희망일시: ${date} ${time}\n요청사항: ${memo}`;
-      const encodedBody = encodeURIComponent(smsBody);
+      // Build Clipboard & SMS text for Representative Park Jisu
+      latestBookingText = `[해담커튼 무료실측신청]\n이름: ${name}\n연락처: ${phone}\n주소: ${address}\n필요제품: ${productsText}\n희망일시: ${date} ${time}\n요청사항: ${memo}`;
+      copyBookingSummary();
+      const encodedBody = encodeURIComponent(latestBookingText);
       document.getElementById('smsDirectBtn').href = `sms:010-2668-9548?body=${encodedBody}`;
 
       // Switch Form View to Success Card
