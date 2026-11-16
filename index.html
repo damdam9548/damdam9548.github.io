@@ -371,23 +371,19 @@
       object-fit: cover;
     }
     .hero-caption {
-      position: absolute;
-      bottom: 16px;
-      left: 16px;
-      right: 16px;
-      background: rgba(33, 33, 33, 0.75);
-      backdrop-filter: blur(8px);
-      color: #fff;
-      padding: 12px 18px;
-      border-radius: 8px;
+      background: var(--bg-white);
+      border-top: 1px solid var(--border-color);
+      color: var(--text-dark);
+      padding: 14px 18px;
       text-align: left;
       font-size: 13px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 16px;
     }
     .hero-caption strong {
-      color: var(--accent-warm);
+      color: #8a6d4b;
     }
 
     /* Trust Stats */
@@ -396,7 +392,7 @@
       border-top: 1px solid var(--border-color);
       border-bottom: 1px solid var(--border-color);
       padding: 32px 0;
-      margin-top: -20px;
+      margin-top: 24px;
     }
     .stats-grid {
       display: grid;
