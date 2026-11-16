@@ -1167,6 +1167,15 @@
         padding: 3px 6px;
       }
     }
+    /* 데스크톱에서는 모바일 하단 고정 바 숨김 */
+    @media (min-width: 769px) {
+      .mobile-cta {
+        display: none;
+      }
+      body {
+        padding-bottom: 0;
+      }
+    }
   </style>
 </head>
 <body>
