@@ -1,0 +1,22 @@
+# 해담커튼블라인드 랜딩페이지 robots.txt
+# 검색엔진과 AI 검색 크롤러의 수집을 모두 허용합니다.
+
+User-agent: *
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Yeti
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+Sitemap: https://damdam9548.github.io/-/sitemap.xml
